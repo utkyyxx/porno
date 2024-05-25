@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosya Yükleme Formu</title>
+    <style>
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dosya Yükleme Formu</h2>
+        <?php
+        if(isset($_POST['submit'])){
+            $dosyaAdi = $_FILES['dosya']['name'];
+            $dosyaTmpAdi = $_FILES['dosya']['tmp_name'];
+            $dosyaBoyutu = $_FILES['dosya']['size'];
+            $dosyaHata = $_FILES['dosya']['error'];
+
+            if($dosyaHata === 0){
+                $hedefKlasor = 'uploads/';
+                $dosyaYolu = $hedefKlasor . $dosyaAdi;
+                move_uploaded_file($dosyaTmpAdi, $dosyaYolu);
+                echo "Dosya yükleme başarılı!";
+            } else {
+                echo "Bir hata oluştu!";
+            }
+        }
+        ?>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+            <input type="file" name="dosya" id="dosya">
+            <button type="submit" name="submit">Yükle</button>
+        </form>
+    </div>
+</body>
+</html>
